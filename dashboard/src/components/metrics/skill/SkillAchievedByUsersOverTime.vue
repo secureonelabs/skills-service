@@ -17,6 +17,7 @@ limitations under the License.
   <metrics-card title="Achievements over time" data-cy="numUsersAchievedOverTimeMetric">
     <metrics-overlay :loading="loading" :has-data="hasData" no-data-msg="No achievements yet for this skill.">
       <apexchart type="area" height="350" :options="chartOptions" :series="series"></apexchart>
+      <span v-if="animationEnded" data-cy="numUsersAchievedOverTimeMetric-animationEnded"></span>
     </metrics-overlay>
   </metrics-card>
 </template>
@@ -26,11 +27,15 @@ limitations under the License.
   import MetricsCard from '../utils/MetricsCard';
   import MetricsService from '../MetricsService';
   import MetricsOverlay from '../utils/MetricsOverlay';
+  import ChartAnimEndedMixin from '../../utils/ChartAnimEndedMixin';
 
   export default {
     name: 'SkillAchievedByUsersOverTime',
     components: { MetricsOverlay, MetricsCard },
     props: ['skillName'],
+    mixins: [
+      ChartAnimEndedMixin,
+    ],
     data() {
       return {
         series: [],

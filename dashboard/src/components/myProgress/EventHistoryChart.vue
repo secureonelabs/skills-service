@@ -34,6 +34,7 @@ limitations under the License.
                   :options="chartOptions"
                   :series="series">
         </apexchart>
+        <span v-if="animationEnded" data-cy="eventHistoryChart-animationEnded"></span>
       </metrics-overlay>
     </metrics-card>
   </div>
@@ -47,12 +48,16 @@ limitations under the License.
   import TimeLengthSelector from '../metrics/common/TimeLengthSelector';
   import dayjs from '../../DayJsCustomizer';
   import MetricsService from '../metrics/MetricsService';
+  import ChartAnimEndedMixin from '../utils/ChartAnimEndedMixin';
 
   export default {
     name: 'EventHistoryChart',
     components: {
       MetricsCard, MetricsOverlay, TimeLengthSelector, Multiselect,
     },
+    mixins: [
+      ChartAnimEndedMixin,
+    ],
     props: {
       availableProjects: {
         type: Array,
@@ -209,6 +214,8 @@ limitations under the License.
           MetricsService.loadMyMetrics('allProjectsSkillEventsOverTimeMetricsBuilder', this.props)
             .then((response) => {
               if (response && response.length > 0 && this.notAllZeros(response)) {
+                // eslint-disable-next-line
+                console.log('loadData() response');
                 this.hasData = true;
                 this.series = response.map((item) => {
                   const ret = {};
