@@ -15,7 +15,15 @@ limitations under the License.
 */
 <template>
   <div>
-    <page-header :loading="isLoading" :options="headerOptions"/>
+    <page-header :loading="isLoading" :options="headerOptions">
+      <div slot="header-left-below-subtitle">
+        <b-button v-if="project" :to="{ name: 'Preview', params: { projectId: project.projectId } }"
+                  data-cy="projectPreview" size="sm"
+                  variant="outline-primary" :aria-label="'preview client display for project'+project.name">
+          <span class="d-sm-line">Preview</span> <i class="fas fa-eye" style="font-size:1rem;" aria-hidden="true"/>
+        </b-button>
+      </div>
+    </page-header>
 
     <navigation v-if="!isLoading" :nav-items="[
           {name: 'Subjects', iconClass: 'fa-cubes skills-color-subjects', page: 'Subjects'},
@@ -104,6 +112,9 @@ limitations under the License.
       ...mapMutations([
         'setProject',
       ]),
+      preview() {
+
+      },
       loadProjects() {
         this.isLoading = true;
         if (this.$route.params.project) {
